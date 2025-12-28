@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import OurWork from './pages/OurWork';
 import ContactUs from './pages/ContactUs';
-import Chatbot from './pages/Chatbot'; // Adjusted to /pages based on previous chat
+import Chatbot from './components/Chatbot';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
