@@ -56,11 +56,12 @@ function Chatbot() {
     try {
       const systemContext = `[STRICT: ENGLISH ONLY] User Query: ${userMsg}`;
       
-      const res = await fetch((window.AGRO_API_URL || 'http://localhost:8000') + '/api/chat/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: systemContext }),
-      });
+     // Replace localhost with your Railway Production URL
+const res = await fetch('https://agro-ai-backend-production-8c2e.up.railway.app/api/chat/', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ message: systemContext }),
+});
       
       const data = await res.json();
       let botReply = data.reply || data.response;
