@@ -18,8 +18,8 @@ function Home() {
     setUploadedImage(imageUrl);
     setIsAnalyzing(true);
 
-    // Use environment variable for Render deployment
-    const apiUrl = import.meta?.env?.VITE_AGRO_API_URL || 'http://localhost:8000/api/predict/';
+    // Use Railway production URL for predict endpoint
+    const apiUrl = 'https://agro-ai-backend-production-8c2e.up.railway.app/api/v1/predict/';
     try {
       const formData = new FormData();
       formData.append('image', file);
@@ -38,9 +38,9 @@ function Home() {
           diseaseName: 'Not a plant',
           confidence: data.confidence || 0.99,
           category: 'non-plant',
-          symptoms: data.disease?.symptoms || [],
-          treatment: data.disease?.treatment || [],
-          preventionTips: data.disease?.preventionTips || [],
+          symptoms: data.symptoms || [],
+          treatment: data.prescriptions || [],
+          preventionTips: [],
           summary: data.summary || '',
           severity: data.severity || '',
         });
@@ -49,9 +49,9 @@ function Home() {
           diseaseName: 'Healthy',
           confidence: data.confidence || 0.95,
           category: 'healthy',
-          symptoms: data.disease?.symptoms || [],
-          treatment: data.disease?.treatment || [],
-          preventionTips: data.disease?.preventionTips || [],
+          symptoms: data.symptoms || [],
+          treatment: data.prescriptions || [],
+          preventionTips: data.disease?.prevention_tips ? data.disease.prevention_tips.split('\n') : [],
           summary: data.summary || '',
           severity: data.severity || '',
         });
@@ -61,10 +61,10 @@ function Home() {
           diseaseName,
           confidence: data.confidence || 0.75,
           category: data.disease?.category || 'unknown',
-          symptoms: data.disease?.symptoms || [],
-          treatment: data.disease?.treatment || [],
-          preventionTips: data.disease?.preventionTips || [],
-          summary: data.summary || '',
+          symptoms: data.symptoms || [],
+          treatment: data.prescriptions || [],
+          preventionTips: data.disease?.prevention_tips ? data.disease.prevention_tips.split('\n') : [],
+          summary: data.disease?.description || '',
           severity: data.severity || '',
         });
       }

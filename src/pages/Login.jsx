@@ -1,104 +1,68 @@
+
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Leaf } from 'lucide-react';
-import HeroSection from '../components/HeroSection';
-import UploadSection from '../components/UploadSection';
-import FeaturesSection from '../components/FeaturesSection';
-import HowItWorksSection from '../components/HowItWorksSection';
-import ResultsSection from '../components/ResultsSection';
+import { useNavigate } from 'react-router-dom';
 
-function Home() {
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const { token } = useAuth();
+function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
 
-  const handleImageUpload = async (file) => {
-    const imageUrl = URL.createObjectURL(file);
-    setUploadedImage(imageUrl);
-    setIsAnalyzing(true);
-
-    // Updated to your Railway URL
-    const apiUrl = 'https://agro-ai-backend-production-8c2e.up.railway.app/api/v1/predict/';
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        body: formData,
-        headers: token ? { Authorization: `Token ${token}` } : {},
-      });
-
-      if (!res.ok) throw new Error('Backend error');
-      const data = await res.json();
-
-      // Mapping Railway Backend response (data.details is the Disease object)
-      const details = data.details;
-      
-      setAnalysisResult({
-        diseaseName: data.prediction || "Unknown Condition",
-        confidence: 0.92, // Placeholder as backend model matures
-        category: details?.category || 'general',
-        symptoms: details?.symptoms || [],
-        treatment: details?.treatment || [],
-        preventionTips: details?.preventionTips || [],
-        summary: details?.description || 'No detailed description available.',
-        severity: "Moderate", 
-      });
-
+      await auth.login(username, password);
+      navigate('/');
     } catch (err) {
-      console.error("API Error:", err);
-      // Keep your fallback for demo purposes if API fails
-      setAnalysisResult({
-        diseaseName: "Connection Issue",
-        confidence: 0,
-        category: "error",
-        symptoms: ["Could not reach the AI server"],
-        treatment: ["Check your internet connection", "Ensure the backend is awake"],
-        preventionTips: []
-      });
+      setError(err.message || 'Login failed');
     } finally {
-      setIsAnalyzing(false);
+      setLoading(false);
     }
   };
 
-  const handleCameraCapture = () => {
-    alert('Camera feature would open here. For demo, please use file upload.');
-  };
-
-  const handleReset = () => {
-    setUploadedImage(null);
-    setAnalysisResult(null);
-    setIsAnalyzing(false);
-  };
-
   return (
-    <>
-      <HeroSection />
-      <UploadSection 
-        onImageUpload={handleImageUpload}
-        onCameraCapture={handleCameraCapture}
-        isAnalyzing={isAnalyzing}
-        uploadedImage={uploadedImage}
-        onReset={handleReset}
-      />
-      {analysisResult && <ResultsSection result={analysisResult} />}
-      <FeaturesSection />
-      <HowItWorksSection />
-      <footer className="bg-[#2E8B57] text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Leaf className="w-6 h-6" />
-            <span className="text-xl font-bold">AGRO AI</span>
-          </div>
-          <p className="text-white/80">Trusted by farmers worldwide</p>
-          <p className="text-white/60 text-sm mt-2">© 2025 AGRO AI. All rights reserved.</p>
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F9F5]">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-[#2E8B57]">Login to AGRO AI</h2>
+        {error && <div className="mb-4 text-red-600">{error}</div>}
+        <div className="mb-4">
+          <label className="block mb-2 text-sm font-medium text-gray-700">Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#2E8B57]"
+            required
+          />
         </div>
-      </footer>
-    </>
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#2E8B57]"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-[#2E8B57] text-white py-2 rounded font-semibold hover:bg-[#276749] transition"
+          disabled={loading}
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+        <div className="mt-4 text-center">
+          <a href="/register" className="text-[#2E8B57] hover:underline">Don't have an account? Register</a>
+        </div>
+      </form>
+    </div>
   );
 }
 
-export default Home;
+export default Login;

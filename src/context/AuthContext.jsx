@@ -36,11 +36,12 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
-    
+
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Login failed');
-    
-    setUser({ id: data.user.id, username: data.user.username, email: data.user.email });
+
+    // Backend returns {token, username}
+    setUser({ username: data.username });
     setToken(data.token);
     return data;
   };
@@ -55,8 +56,8 @@ export function AuthProvider({ children }) {
     
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Register failed');
-    
-    setUser({ id: data.user.id, username: data.user.username, email: data.user.email });
+    // Backend returns {token, user: {id, username}}
+    setUser({ id: data.user.id, username: data.user.username });
     setToken(data.token);
     return data;
   };
