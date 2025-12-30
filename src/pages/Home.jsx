@@ -6,6 +6,7 @@ import UploadSection from '../components/UploadSection';
 import FeaturesSection from '../components/FeaturesSection';
 import HowItWorksSection from '../components/HowItWorksSection';
 import ResultsSection from '../components/ResultsSection';
+import DebugConnection from '../components/DebugConnection';
 
 function Home() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -105,6 +106,9 @@ function Home() {
   return (
     <>
       <HeroSection />
+      <div className="bg-gray-100 py-4">
+        <DebugConnection />
+      </div>
 
       <UploadSection
         onImageUpload={handleImageUpload}
