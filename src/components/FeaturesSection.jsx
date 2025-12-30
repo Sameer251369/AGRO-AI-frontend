@@ -16,82 +16,88 @@ function FeaturesSection() {
       setCurrentBgIndex((prevIndex) => 
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 3000);
+    }, 5000); // Slower transition for a more premium feel
 
     return () => clearInterval(interval);
   }, []);
+
   const features = [
     {
       icon: Sparkles,
       title: "Instant Detection",
-      description: "Get results in seconds with our advanced AI technology"
+      description: "Proprietary neural networks provide diagnostic results in sub-second intervals."
     },
     {
       icon: BookOpen,
       title: "Detailed Information",
-      description: "Learn about the disease, symptoms, and affected areas"
+      description: "Comprehensive botanical database covering morphology and pathogen life cycles."
     },
     {
       icon: ShieldCheck,
-      title: "Treatment Recommendations",
-      description: "Receive actionable treatment plans and prevention tips"
+      title: "Treatment Protocols",
+      description: "Science-backed recovery plans and localized preventative measures."
     },
     {
       icon: Wifi,
       title: "Offline Support",
-      description: "Works without internet after initial setup"
+      description: "Edge-computing capabilities allow for diagnostics in remote field locations."
     }
   ];
 
   return (
-    <section className="relative py-16 overflow-hidden">
-      {/* Subtle background carousel */}
+    <section className="relative py-24 overflow-hidden bg-[#F8F9F5]">
+      {/* Subtle background carousel watermark */}
       <div className="absolute inset-0 z-0">
         {backgroundImages.map((image, index) => (
           <div
             key={index}
-            className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+            className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
             style={{
               backgroundImage: `url(${image})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              opacity: currentBgIndex === index ? 0.03 : 0,
+              opacity: currentBgIndex === index ? 0.04 : 0,
             }}
           />
         ))}
-        <div className="absolute inset-0 bg-white/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F8F9F5] via-transparent to-[#F8F9F5]"></div>
       </div>
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-[#2C3E50] mb-4">Features</h2>
-          <p className="text-lg text-[#64748B] max-w-2xl mx-auto">
-            Everything you need to protect your crops and maximize yield
-          </p>
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 bg-[#2E8B57]/10 border border-[#2E8B57]/20 px-4 py-1.5 rounded-full mb-6">
+            <span className="text-[#2E8B57] text-[10px] font-bold uppercase tracking-[0.2em]">Core Capabilities</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-light text-[#2C3E50] tracking-tight">
+            Advanced <span className="font-bold">System Features</span>
+          </h2>
+          <div className="w-16 h-1 bg-[#4ADE80] mx-auto mt-6" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
               <div 
                 key={index}
-                className="group card text-center hover:scale-105 transition-all duration-300 hover:shadow-2xl cursor-pointer relative overflow-hidden"
+                className="group relative bg-white border border-gray-100 p-8 rounded-sm hover:border-[#4ADE80]/50 transition-all duration-500 hover:shadow-xl cursor-default"
               >
-                {/* Animated background gradient on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#2E8B57]/0 to-[#93C572]/0 group-hover:from-[#2E8B57]/5 group-hover:to-[#93C572]/5 transition-all duration-500 rounded-xl"></div>
+                {/* Decorative Accent */}
+                <div className="absolute top-0 left-0 w-1 h-0 bg-[#4ADE80] group-hover:h-full transition-all duration-500" />
                 
                 <div className="relative z-10">
-                  <div className="bg-[#2E8B57]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2E8B57] group-hover:scale-110 transition-all duration-300">
+                  <div className="bg-[#F8F9F5] w-14 h-14 rounded-sm flex items-center justify-center mb-6 group-hover:bg-[#1A252F] transition-all duration-500">
                     <Icon 
-                      className="w-8 h-8 text-[#2E8B57] group-hover:text-white transition-colors duration-300" 
-                      style={{ width: '32px', height: '32px' }}
+                      className="w-6 h-6 text-[#2E8B57] group-hover:text-[#4ADE80] transition-colors duration-500" 
                     />
                   </div>
-                  <h3 className="text-xl font-bold text-[#2C3E50] mb-2 group-hover:text-[#2E8B57] transition-colors duration-300">
+                  
+                  <h3 className="text-xs font-bold text-[#2C3E50] uppercase tracking-widest mb-4 group-hover:text-[#2E8B57] transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-[#64748B] group-hover:text-[#2C3E50] transition-colors duration-300">
+                  
+                  <p className="text-[#64748B] text-sm font-light leading-relaxed transition-colors group-hover:text-[#2C3E50]">
                     {feature.description}
                   </p>
                 </div>
